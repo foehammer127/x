@@ -1,3 +1,3 @@
 module github.com/foehammer127/x
 
-go 1.21.0
+go 1.21
