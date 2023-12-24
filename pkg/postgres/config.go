@@ -1,5 +1,7 @@
 package postgres
 
+import "github.com/jmoiron/sqlx"
+
 type PgConfig struct {
 	User       string
 	Password   string
@@ -8,3 +10,5 @@ type PgConfig struct {
 	Name       string
 	DisableTLS bool
 }
+
+type TxFunction func(tx *sqlx.Tx) error

@@ -61,7 +61,7 @@ func (db *PgDb) GetConn(ctx context.Context) (*sqlx.Conn, func() error, error) {
 	return conn, conn.Close, nil
 }
 
-func (db *PgDb) RunInTx(ctx context.Context, fn func(*sqlx.Tx) error) error {
+func (db *PgDb) RunInTx(ctx context.Context, fn TxFunction) error {
 	conn, Close, err := db.GetConn(ctx)
 	if err != nil {
 		return err
@@ -77,7 +77,7 @@ func (db *PgDb) RunInTx(ctx context.Context, fn func(*sqlx.Tx) error) error {
 	return db.txRun(tx, fn)
 }
 
-func (db *PgDb) txRun(tx *sqlx.Tx, fn func(*sqlx.Tx) error) error {
+func (db *PgDb) txRun(tx *sqlx.Tx, fn TxFunction) error {
 	defer func() {
 		if err := recover(); err != nil {
 			if rbErr := tx.Rollback(); rbErr != nil {
