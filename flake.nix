@@ -33,8 +33,13 @@
           ];
         };
 
-        devShells.default =
-          pkgs.callPackage ./nix/devshell.nix {};
+        devShells = {
+          default = pkgs.callPackage ./nix/devshell.nix {
+            dev = true;
+          };
+
+          ci = pkgs.callPackage ./nix/devshell.nix {};
+        };
 
         packages = {
           go = pkgs.callPackage ./nix/go-package.nix {};

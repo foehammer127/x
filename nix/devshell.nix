@@ -1,5 +1,12 @@
-{pkgs, ...}: let
-  basePackages = with pkgs; [
+{
+  pkgs,
+  lib,
+  dev ? false,
+  ...
+}: let
+  inherit (lib) optionals;
+
+  devPackages = with pkgs; [
     just
 
     # Go Tools
@@ -9,7 +16,7 @@
     gopls
   ];
 
-  packages = basePackages;
+  packages = [] ++ optionals dev devPackages;
 in
   pkgs.mkShell {
     inherit packages;
