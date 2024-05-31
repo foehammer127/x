@@ -29,13 +29,22 @@
           };
 
           overlays = [
+            self.overlays.default
           ];
         };
 
         devShells.default =
           pkgs.callPackage ./nix/devshell.nix {};
 
+        packages = {
+          go = pkgs.callPackage ./nix/go-package.nix {};
+        };
+
         formatter = inputs'.alejandra.packages.default;
+      };
+
+      flake = {
+        overlays.default = import ./nix/overlay.nix self;
       };
     });
 }
