@@ -10,7 +10,7 @@
   };
 
   outputs = inputs @ {self, ...}:
-    inputs.flake-parts.lib.mkFlake {inherit inputs;} ({withSystem, ...}: {
+    inputs.flake-parts.lib.mkFlake {inherit inputs;} (toplevel @ {withSystem, ...}: {
       systems = ["aarch64-darwin" "aarch64-linux" "x86_64-linux"];
 
       perSystem = {
@@ -28,17 +28,12 @@
             allowAliases = true;
           };
 
-          overlays = [
-            self.overlays.default
-          ];
+          overlays = [];
         };
 
         devShells = {
-          default = pkgs.callPackage ./nix/devshell.nix {
-            dev = true;
-          };
-
-          ci = pkgs.callPackage ./nix/devshell.nix {};
+          default =
+            pkgs.callPackage ./nix/devshell.nix {};
         };
 
         packages = {
@@ -49,7 +44,7 @@
       };
 
       flake = {
-        overlays.default = import ./nix/overlay.nix self;
+        overlays = import ./nix/overlays.nix toplevel;
       };
     });
 }
